@@ -10,3 +10,8 @@ spring:
       password: example
       database: circuit-breaker
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"

@@ -5,6 +5,7 @@ import com.mrsalustiano.publication.entity.PublicationEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")
+
 public interface PublicationMapper {
 
     PublicationEntity toEntity(Publication publication);
