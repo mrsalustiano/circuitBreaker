@@ -1,8 +1,11 @@
 package com.mrsalustiano.publication.controller;
 
 import com.mrsalustiano.publication.domain.Publication;
+import com.mrsalustiano.publication.domain.PublicationRequest;
 import com.mrsalustiano.publication.entity.PublicationEntity;
+import com.mrsalustiano.publication.mapper.PublicationMapper;
 import com.mrsalustiano.publication.service.PublicationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,35 +17,29 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PublicationController {
     private final PublicationService service;
-
+    private final PublicationMapper mapper;
 
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void insert(@RequestBody Publication publication) {
-        service.insert(publication);
+    public void insert(@Valid @RequestBody PublicationRequest publication) {
+        var pub = mapper.toDomain(publication);
+        service.insert(pub);
     }
 
     @GetMapping
+    @ResponseStatus(HttpStatus.OK)
     public List<Publication> findAll() {
-        return service.findAll();
+        var retorno = service.findAll();
+        return retorno;
     }
 
     @GetMapping("/{id}")
-    public Publication findById(@PathVariable String id) {
+    @ResponseStatus(HttpStatus.OK)
+    public Publication findById(@PathVariable(value = "id") String id) {
         return service.findById(id);
     }
 
-    @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable String id) {
-        service.delete(id);
-    }
 
-    @PutMapping
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@RequestBody PublicationEntity publication){
-        service.update(publication);
-    }
 
 }

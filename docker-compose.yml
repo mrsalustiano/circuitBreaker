@@ -1,0 +1,48 @@
+services:
+  mongo:
+    image: mongo
+    restart: always
+    ports:
+    - 27017:27017
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - app-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh mongo:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+    - "8081:8081" # Corrected to match ME_CONFIG_PORT
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: example
+      ME_CONFIG_MONGODB_URL: mongodb://root:example@mongo:27017/
+      ME_CONFIG_PORT: 8081
+      ME_CONFIG_BASICAUTH_USERNAME: root    # Added for Mongo Express login
+      ME_CONFIG_BASICAUTH_PASSWORD: example # Added for Mongo Express login
+    networks:
+      - app-network
+    depends_on:
+      mongo:
+        condition: service_healthy
+  redis-compose:
+    image: redis
+    command: redis-server
+    hostname: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+  broker-kafka:
+    driver: bridge
