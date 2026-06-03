@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- Appender para logs no console -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- Configuração do logger raiz (nível padrão) -->
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+    <!-- Exemplo: Definir nível DEBUG para um pacote específico -->
+    <logger name="com.mrsalustiano.publication" level="DEBUG"/>
+
+    <!-- Exemplo: Definir nível TRACE para outro pacote -->
+    <logger name="com.mrsalustiano.service" level="TRACE"/>
+
+    <!-- Exemplo: Definir nível WARN para um pacote -->
+    <logger name="com.mrsalustiano.util" level="WARN"/>
+</configuration>
